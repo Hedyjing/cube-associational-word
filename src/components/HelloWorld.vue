@@ -3,6 +3,14 @@
     <h1>{{ message }}</h1>
     <h2>{{ !showValue || words[message] }}</h2>
   </div>
+  <div style="height: 100px">
+    <p>
+      <strong>{{ firstLetter }}: {{ map1.get(firstLetter) }}</strong>
+    </p>
+    <p>
+      <strong>{{ secondLetter }}: {{ map2.get(secondLetter) }}</strong>
+    </p>
+  </div>
   <div class="footer">
     <h1>不会</h1>
     <h1>会</h1>
@@ -10,10 +18,14 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 let message = ref("hello");
-let words = {};
+const words = {};
 let showValue = ref(false);
+const map1 = new Map();
+const map2 = new Map();
+const firstLetter = computed(() => message.value.substr(0, 1));
+const secondLetter = computed(() => message.value.substr(1, 1));
 function handlerStr(str) {
   let arr = str.match(/[A-Z]+[^A-Z]+/g);
   for (let i = 0; i < arr.length; i++) {
@@ -21,8 +33,26 @@ function handlerStr(str) {
     const key = arr[i].match(/[A-Z]+/)[0];
     const value = arr[i].match(/[^A-Z]+/)[0];
     words[key] = value;
+    if (key.length > 1) {
+      const firstLetter = key.substr(0, 1);
+      const secondLetter = key.substr(1, 1);
+      const firstChar = value.substr(0, 1);
+      const secondChar = value.substr(1, 1);
+      if (!map1.get(firstLetter)) {
+        map1.set(firstLetter, new Set().add(firstChar));
+      } else {
+        map1.get(firstLetter).add(firstChar);
+      }
+      if (!map2.get(secondLetter)) {
+        map2.set(secondLetter, new Set().add(secondChar));
+      } else {
+        map2.get(secondLetter).add(secondChar);
+      }
+    }
   }
 }
+// handler map
+
 handlerStr(`A圣诞帽ABanglaAC足球队AD钙奶AEaoeAF长颈鹿AG银子AH爱河AI机器人AJ鞋AK枪AL阿狸AM电动车AN蚂蚁AO奥特曼AP苹果AQ安琪拉AR眼镜AS阿尔卑斯棒棒糖ATatmAWawmAX爱心AY奥运五环AZ安卓手机
 
 B宝宝BA靶子BC奔驰BD板凳BE蜜蜂BF蝙蝠BG包裹BH壁虎BI匕首BJ芭蕉扇BK贝壳BL菠萝BM宝马BN豹女BO波BP鞭炮BQ棒球BR冰人BS宝石BT白糖BW冰屋BX冰箱BY白云BZ巴掌
@@ -55,7 +85,7 @@ O游泳圈OAc4OB兔子OC手环OD子弹OE梳子OF藕粉OG奖杯OH单杠OI气球OJ
 
 P口哨PApapi酱PB皮鞭PC瓢虫PD皮蛋PE屁股PF屏风PG排骨PH胖虎PI猪PJ啤酒PK扑克PL盘龙PM泡面PN乒乓球PO坡PQ喷泉PR飘柔PS披萨PT葡萄PW喷雾PX皮鞋PY皮影PZ盆子
 
-Qqq糖QA恰恰瓜子QB钱包QC球场QD强盗QE企鹅QF球阀QG气管QH清华QI棋QJ青椒QK秋裤QL麒麟QM球门QN琴女QO悠悠球QP气泡QR奇瑞qqQS骑士QT打气筒QW七娃QX千玺QY汽油QZ橘子
+Qqq糖QA恰恰瓜子QB钱包QC球场QD强盗QE企鹅QF鸵鸟QG气管QH清华QI棋QJ青椒QK秋裤QL麒麟QM球门QN琴女QO悠悠球QP气泡QR奇瑞qqQS骑士QT打气筒QW七娃QX千玺QY汽油QZ橘子
 
 R火箭RA太阳神RB热巴RC羊肉串RD溶洞RE蕾姆RF乳房RG忍龟RH如花RI太阳RJ日记RK热裤RL日历RM人民币RN雨RO生肉RP软盘RQ容器RS人参RT肉体RW瑞文RX人心RY人眼RZ人字拖
 
