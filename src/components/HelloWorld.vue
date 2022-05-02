@@ -3,7 +3,7 @@
     <h1>{{ message }}</h1>
     <h2>{{ !showValue || words[message] }}</h2>
   </div>
-  <div style="height: 100px">
+  <div style="height: 300px">
     <p>
       <strong>{{ firstLetter }}: {{ map1.get(firstLetter) }}</strong>
     </p>
